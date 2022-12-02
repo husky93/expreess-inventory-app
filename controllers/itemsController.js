@@ -1,4 +1,5 @@
 const Item = require('../models/item');
+const { body, validationResult } = require('express-validator');
 
 exports.item_detail = (req, res, next) => {
   Item.findById(req.params.id).exec((err, item) => {
@@ -17,11 +18,33 @@ exports.item_detail = (req, res, next) => {
 };
 
 exports.item_delete_get = (req, res) => {
-  res.send('NOT IMPLEMENTED: Item Delete GET');
+  Item.findById(req.params.id).exec((err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item == null) {
+      res.redirect('/');
+    }
+    res.render('item_delete', { title: 'Delete item', item });
+  });
 };
 
-exports.item_delete_post = (req, res) => {
-  res.send('NOT IMPLEMENTED: Item Detail POST');
+exports.item_delete_post = (req, res, next) => {
+  Item.findById(req.body.itemid).exec((err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item == null) {
+      res.redirect('/');
+    }
+    Item.findByIdAndRemove(req.body.itemid, (err) => {
+      if (err) {
+        return next(err);
+      }
+      // Success - go to author list
+      res.redirect('/');
+    });
+  });
 };
 
 exports.item_create_get = (req, res) => {
