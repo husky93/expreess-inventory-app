@@ -60,9 +60,67 @@ exports.item_create_get = (req, res, next) => {
   });
 };
 
-exports.item_create_post = (req, res) => {
-  res.send('NOT IMPLEMENTED: ItemCreate POST');
-};
+exports.item_create_post = [
+  body('name')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Item name must be specified.')
+    .isLength({ max: 100 })
+    .withMessage('Item name must be maximum 100 characters.'),
+  body('description')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Description must be specified.'),
+  body('price')
+    .isNumeric()
+    .notEmpty()
+    .escape()
+    .withMessage('Enter a valid price.'),
+  body('number_in_stock')
+    .isNumeric()
+    .notEmpty()
+    .escape()
+    .withMessage('Enter a valid number.'),
+  body('category').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      number_in_stock: req.body.number_in_stock,
+      category: req.body.category,
+    });
+
+    if (!errors.isEmpty()) {
+      Category.find().exec((err, categories) => {
+        if (err) {
+          return next(err);
+        }
+        if (categories == null) {
+          res.redirect('/');
+        }
+        res.render('item_form', {
+          title: 'Create New Item',
+          categories,
+          item,
+          errors: errors.array(),
+        });
+      });
+      return;
+    }
+
+    item.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(item.url);
+    });
+  },
+];
 
 exports.item_update_get = (req, res) => {
   res.send('NOT IMPLEMENTED: Item Update GET');

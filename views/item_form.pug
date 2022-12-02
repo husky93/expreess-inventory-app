@@ -6,17 +6,21 @@ block content
       form(method='POST' action='')
         div.form-group
           label(for='name') Name:
-          input#name.form-control(type='text', name='name', required='true')
+          input#name.form-control(type='text', name='name', required='true' value=(undefined===item ? '' : item.name))
           label(for='description') Description:
-          textarea#description.form-control(type='text', name='name', required='true')
+          textarea#description.form-control(type='text', name='description', required='true' value=(undefined===item ? '' : item.description))
           label(for='price') Price:
-          input#price.form-control(type='number', name='price', required='true')
+          input#price.form-control(type='number', name='price', required='true' value=(undefined===item ? '' : item.price))
           label(for='number_in_stock') How many in stock:
-          input#number_in_stock.form-control(type='number', name='number_in_stock', required='true')
+          input#number_in_stock.form-control(type='number', name='number_in_stock', required='true' value=(undefined===item ? '' : item.number_in_stock))
           label(for='category') Category:
-          select#category.form-control(type='number', name='number_in_stock', required='true')
+          select#category.form-control(name='category', required='true')
             each category in categories
               option(value=category._id)= category.title
 
         button.btn.btn-primary(type='submit') Add new item
+      if errors
+        ul
+          for error in errors
+            li!= error.msg
 
