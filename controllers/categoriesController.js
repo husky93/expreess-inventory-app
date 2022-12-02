@@ -1,5 +1,17 @@
-exports.index = (req, res) => {
-  res.send('NOT IMPLEMENTED: index GET');
+const Category = require('../models/category');
+
+exports.index = (req, res, next) => {
+  Category.find()
+    .sort([['name', 'ascending']])
+    .exec((err, categories_list) => {
+      if (err) {
+        return next(err);
+      }
+      res.render('categories', {
+        title: 'Categories',
+        categories_list,
+      });
+    });
 };
 
 exports.category_detail = (req, res) => {
