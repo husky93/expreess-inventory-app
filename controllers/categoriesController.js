@@ -6,10 +6,6 @@ exports.category_detail = (req, res) => {
   res.send('NOT IMPLEMENTED: Category Detail GET');
 };
 
-exports.category_detail = (req, res) => {
-  res.send('NOT IMPLEMENTED: Category Detail GET');
-};
-
 exports.category_delete_get = (req, res) => {
   res.send('NOT IMPLEMENTED: Category Delete GET');
 };
