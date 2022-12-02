@@ -1,4 +1,5 @@
 const Item = require('../models/item');
+const Category = require('../models/category');
 const { body, validationResult } = require('express-validator');
 
 exports.item_detail = (req, res, next) => {
@@ -47,8 +48,16 @@ exports.item_delete_post = (req, res, next) => {
   });
 };
 
-exports.item_create_get = (req, res) => {
-  res.send('NOT IMPLEMENTED: Item Create GET');
+exports.item_create_get = (req, res, next) => {
+  Category.find().exec((err, categories) => {
+    if (err) {
+      return next(err);
+    }
+    if (categories == null) {
+      res.redirect('/');
+    }
+    res.render('item_form', { title: 'Create New Item', categories });
+  });
 };
 
 exports.item_create_post = (req, res) => {

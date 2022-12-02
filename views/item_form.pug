@@ -1,0 +1,22 @@
+extends layout 
+
+block content
+  h1 #{title}
+  div(class='container')
+      form(method='POST' action='')
+        div.form-group
+          label(for='name') Name:
+          input#name.form-control(type='text', name='name', required='true')
+          label(for='description') Description:
+          textarea#description.form-control(type='text', name='name', required='true')
+          label(for='price') Price:
+          input#price.form-control(type='number', name='price', required='true')
+          label(for='number_in_stock') How many in stock:
+          input#number_in_stock.form-control(type='number', name='number_in_stock', required='true')
+          label(for='category') Category:
+          select#category.form-control(type='number', name='number_in_stock', required='true')
+            each category in categories
+              option(value=category._id)= category.title
+
+        button.btn.btn-primary(type='submit') Add new item
+
