@@ -1,0 +1,7 @@
+extends layout
+
+block content
+  h1 Categories
+  each category in categories_list
+    div(class='category')
+      a(href=category.url)= category.title
