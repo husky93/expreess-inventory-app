@@ -17,8 +17,10 @@ block content
           select#category.form-control(name='category', required='true')
             each category in categories
               option(value=category._id)= category.title
-
-        button.btn.btn-primary(type='submit') Add new item
+        if update
+          button.btn.btn-primary(type='submit') Update item
+        else
+          button.btn.btn-primary(type='submit') Add new item
       if errors
         ul
           for error in errors

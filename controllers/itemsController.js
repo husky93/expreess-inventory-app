@@ -1,6 +1,7 @@
+const async = require('async');
+const { body, validationResult } = require('express-validator');
 const Item = require('../models/item');
 const Category = require('../models/category');
-const { body, validationResult } = require('express-validator');
 
 exports.item_detail = (req, res, next) => {
   Item.findById(req.params.id).exec((err, item) => {
@@ -122,10 +123,94 @@ exports.item_create_post = [
   },
 ];
 
-exports.item_update_get = (req, res) => {
-  res.send('NOT IMPLEMENTED: Item Update GET');
+exports.item_update_get = (req, res, next) => {
+  async.parallel(
+    {
+      categories(callback) {
+        Category.find(callback);
+      },
+      item(callback) {
+        Item.findById(req.params.id).exec(callback);
+      },
+    },
+    (err, results) => {
+      if (err) {
+        return next(err);
+      }
+      if (results.item == null) {
+        const error = new Error('Item not found');
+        error.status = 404;
+        return next(error);
+      }
+      res.render('item_form', {
+        title: `Update Item: ${results.item.name}`,
+        item: results.item,
+        categories: results.categories,
+        update: true,
+      });
+    }
+  );
 };
 
-exports.item_update_post = (req, res) => {
-  res.send('NOT IMPLEMENTED: Item Update POST');
-};
+exports.item_update_post = [
+  body('name')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Item name must be specified.')
+    .isLength({ max: 100 })
+    .withMessage('Item name must be maximum 100 characters.'),
+  body('description')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Description must be specified.'),
+  body('price')
+    .isNumeric()
+    .notEmpty()
+    .escape()
+    .withMessage('Enter a valid price.'),
+  body('number_in_stock')
+    .isNumeric()
+    .notEmpty()
+    .escape()
+    .withMessage('Enter a valid number.'),
+  body('category').escape(),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      number_in_stock: req.body.number_in_stock,
+      category: req.body.category,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      Category.find().exec((err, categories) => {
+        if (err) {
+          return next(err);
+        }
+        if (categories == null) {
+          res.redirect('/');
+        }
+        res.render('item_form', {
+          title: `Update Item: ${item.name}`,
+          categories,
+          item,
+          errors: errors.array(),
+        });
+      });
+      return;
+    }
+
+    Item.findByIdAndUpdate(req.params.id, item, {}, (err, theitem) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(theitem.url);
+    });
+  },
+];
