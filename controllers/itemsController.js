@@ -1,5 +1,19 @@
-exports.item_detail = (req, res) => {
-  res.send('NOT IMPLEMENTED: Item Detail GET');
+const Item = require('../models/item');
+
+exports.item_detail = (req, res, next) => {
+  Item.findById(req.params.id).exec((err, item) => {
+    if (err) {
+      return next(err);
+    }
+    if (item == null) {
+      const error = new Error('Item not found');
+      error.status = 404;
+      return next(error);
+    }
+    res.render('item_details', {
+      item,
+    });
+  });
 };
 
 exports.item_delete_get = (req, res) => {

@@ -3,9 +3,9 @@ extends layout
 block content
   div(class='wrapper')
     section(class='category_content')
-      h1= item.title
+      h1= item.name
       p= item.description
       p(class='price') Price: #{item.price}$
-      p(class='price') Items in stock: #{item.number_in_stock}$
+      p(class='price') Items in stock: #{item.number_in_stock}
 
 
