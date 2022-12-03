@@ -109,7 +109,7 @@ exports.category_delete_post = (req, res, next) => {
 };
 
 exports.category_create_get = (req, res) => {
-  res.send('NOT IMPLEMENTED: Category Create GET');
+  res.render('category_form', { title: 'Create New Category' });
 };
 
 exports.category_create_post = (req, res) => {
