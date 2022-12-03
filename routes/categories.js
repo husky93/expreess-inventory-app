@@ -7,9 +7,9 @@ router.get('/', categories_controller.index);
 
 router.get('/:id', categories_controller.category_detail);
 
-router.get('/:id/delete', categories_controller.category_delete_get);
+router.get('/delete/:id', categories_controller.category_delete_get);
 
-router.post('/:id/delete', categories_controller.category_delete_post);
+router.post('/delete/:id', categories_controller.category_delete_post);
 
 router.get('/create', categories_controller.category_create_get);
 
