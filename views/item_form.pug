@@ -8,7 +8,7 @@ block content
           label(for='name') Name:
           input#name.form-control(type='text', name='name', required='true' value=(undefined===item ? '' : item.name))
           label(for='description') Description:
-          textarea#description.form-control(type='text', name='description', required='true' value=(undefined===item ? '' : item.description))
+          textarea#description.form-control(type='text', name='description', required='true')= undefined===item ? '' : item.description
           label(for='price') Price:
           input#price.form-control(type='number', name='price', required='true' value=(undefined===item ? '' : item.price))
           label(for='number_in_stock') How many in stock:
