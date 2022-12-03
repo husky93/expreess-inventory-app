@@ -1,0 +1,17 @@
+extends layout 
+
+block content
+  h1 #{title}: #{category.title}
+  div(class='container')
+    if category_items.length === 0
+      p Do you really want to delete this Category?
+        form(method='POST' action='')
+          div.form-group
+          button.btn.btn-primary(type='submit') Delete
+    else 
+      p You have to delete these items before deleting #{category.title} Category:
+      ul
+        each item in category_items
+          li
+            a(href=`/items/delete/${item._id}`)= item.name
+
