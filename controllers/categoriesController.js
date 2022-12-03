@@ -1,6 +1,7 @@
+const async = require('async');
+const { body, validationResult } = require('express-validator');
 const Category = require('../models/category');
 const Item = require('../models/item');
-const async = require('async');
 
 exports.index = (req, res, next) => {
   Category.find()
@@ -112,9 +113,52 @@ exports.category_create_get = (req, res) => {
   res.render('category_form', { title: 'Create New Category' });
 };
 
-exports.category_create_post = (req, res) => {
-  res.send('NOT IMPLEMENTED: Category Create POST');
-};
+exports.category_create_post = [
+  body('title')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Category title must be specified.')
+    .isLength({ max: 100 })
+    .withMessage('Category title must be maximum 100 characters.'),
+  body('description')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Description must be specified.'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const category = new Category({
+      title: req.body.title,
+      description: req.body.description,
+    });
+
+    if (!errors.isEmpty()) {
+      Category.find().exec((err, categories) => {
+        if (err) {
+          return next(err);
+        }
+        if (categories == null) {
+          res.redirect('/');
+        }
+        res.render('category_form', {
+          title: 'Create New Category',
+          category,
+          errors: errors.array(),
+        });
+      });
+      return;
+    }
+
+    category.save((err) => {
+      if (err) {
+        return next(err);
+      }
+      res.redirect(category.url);
+    });
+  },
+];
 
 exports.category_update_get = (req, res) => {
   res.send('NOT IMPLEMENTED: Category Update GET');
