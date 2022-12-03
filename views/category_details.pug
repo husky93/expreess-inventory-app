@@ -10,3 +10,5 @@ block content
           li
             a(href=item.url)= item.name
             p(class='price') Price: #{item.price}$
+      a(href=`/categories/delete/${category._id}`)
+        button Delete Category
