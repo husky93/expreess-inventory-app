@@ -5,18 +5,23 @@ block content
   div(class='container')
       form(method='POST' action='')
         div.form-group
-          label(for='name') Name:
-          input#name.form-control(type='text', name='name', required='true' value=(undefined===item ? '' : item.name))
-          label(for='description') Description:
-          textarea#description.form-control(type='text', name='description', required='true')= undefined===item ? '' : item.description
-          label(for='price') Price:
-          input#price.form-control(type='number', name='price', required='true' value=(undefined===item ? '' : item.price))
-          label(for='number_in_stock') How many in stock:
-          input#number_in_stock.form-control(type='number', name='number_in_stock', required='true' value=(undefined===item ? '' : item.number_in_stock))
-          label(for='category') Category:
-          select#category.form-control(name='category', required='true')
-            each category in categories
-              option(value=category._id)= category.title
+          div.input-group
+            label(for='name') Name:
+            input#name.form-control(type='text', name='name', required='true' value=(undefined===item ? '' : item.name))
+          div.input-group
+            label(for='description') Description:
+            textarea#description.form-control(type='text', name='description', required='true')= undefined===item ? '' : item.description
+          div.input-group
+            label(for='price') Price:
+            input#price.form-control(type='number', name='price', required='true' value=(undefined===item ? '' : item.price))
+          div.input-group
+            label(for='number_in_stock') How many in stock:
+            input#number_in_stock.form-control(type='number', name='number_in_stock', required='true' value=(undefined===item ? '' : item.number_in_stock))
+          div.input-group
+            label(for='category') Category:
+            select#category.form-control(name='category', required='true')
+              each category in categories
+                option(value=category._id)= category.title
         if update
           button.btn.btn-primary(type='submit') Update item
         else

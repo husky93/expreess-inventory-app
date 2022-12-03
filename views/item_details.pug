@@ -7,5 +7,9 @@ block content
       p= item.description
       p(class='price') Price: #{item.price}$
       p(class='price') Items in stock: #{item.number_in_stock}
-
+      div.button-ui
+        a(href=`/items/delete/${item._id}`)
+          button Delete Item
+        a(href=`/items/update/${item._id}`)
+          button Update Item
 
