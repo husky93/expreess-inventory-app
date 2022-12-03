@@ -19,7 +19,7 @@ exports.item_detail = (req, res, next) => {
   });
 };
 
-exports.item_delete_get = (req, res) => {
+exports.item_delete_get = (req, res, next) => {
   Item.findById(req.params.id).exec((err, item) => {
     if (err) {
       return next(err);

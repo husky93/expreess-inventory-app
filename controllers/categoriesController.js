@@ -135,20 +135,11 @@ exports.category_create_post = [
     });
 
     if (!errors.isEmpty()) {
-      Category.find().exec((err, categories) => {
-        if (err) {
-          return next(err);
-        }
-        if (categories == null) {
-          res.redirect('/');
-        }
-        res.render('category_form', {
-          title: 'Create New Category',
-          category,
-          errors: errors.array(),
-        });
+      res.render('category_form', {
+        title: 'Create New Category',
+        category,
+        errors: errors.array(),
       });
-      return;
     }
 
     category.save((err) => {
@@ -160,10 +151,64 @@ exports.category_create_post = [
   },
 ];
 
-exports.category_update_get = (req, res) => {
-  res.send('NOT IMPLEMENTED: Category Update GET');
+exports.category_update_get = (req, res, next) => {
+  Category.findById(req.params.id).exec((err, category) => {
+    if (err) {
+      return next(err);
+    }
+    if (category == null) {
+      const error = new Error('Category not found');
+      error.status = 404;
+      return next(error);
+    }
+    res.render('category_form', {
+      title: 'Update Category',
+      update: true,
+      category,
+    });
+  });
 };
 
-exports.category_update_post = (req, res) => {
-  res.send('NOT IMPLEMENTED: Category Update POST');
-};
+exports.category_update_post = [
+  body('title')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Category title must be specified.')
+    .isLength({ max: 100 })
+    .withMessage('Category title must be maximum 100 characters.'),
+  body('description')
+    .trim()
+    .isLength({ min: 1 })
+    .escape()
+    .withMessage('Description must be specified.'),
+  (req, res, next) => {
+    const errors = validationResult(req);
+
+    const category = new Category({
+      title: req.body.title,
+      description: req.body.description,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      res.render('category_form', {
+        title: 'Update Category',
+        category,
+        errors: errors.array(),
+      });
+    }
+
+    Category.findByIdAndUpdate(
+      req.params.id,
+      category,
+      {},
+      (err, thecategory) => {
+        if (err) {
+          return next(err);
+        }
+        res.redirect(thecategory.url);
+      }
+    );
+  },
+];
