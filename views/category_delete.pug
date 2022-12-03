@@ -7,6 +7,7 @@ block content
       p Do you really want to delete this Category?
         form(method='POST' action='')
           div.form-group
+            input#itemid.form-control(type='hidden',name='categoryid', required='true', value=category._id )
           button.btn.btn-primary(type='submit') Delete
     else 
       p You have to delete these items before deleting #{category.title} Category:
