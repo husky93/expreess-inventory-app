@@ -4,6 +4,12 @@ A simple CRUD application following the MVC pattern made with [Node.js](https://
 
 ### Live: [https://express-inventory-app.onrender.com/](https://express-inventory-app.onrender.com/)
 
+## How to run server locally:
+- Clone repository.
+- Run ``npm install`` command in your terminal.
+- Run ``npm run start`` command in your terminal.
+- Server will listen to requests from ``localhost:3000``.
+
 ## Features
 - Model View Controller pattern based application.
 - Custom routing with params based routes.
