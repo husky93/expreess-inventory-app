@@ -7,6 +7,8 @@ A simple CRUD application following the MVC pattern made with [Node.js](https://
 ## How to run server locally:
 - Clone repository.
 - Run ``npm install`` command in your terminal.
+- Create .env file
+- In .env file set up new enviromental variable named ``MONGODB_URL`` and paste your own mongoDB connection link.
 - Run ``npm run start`` command in your terminal.
 - Server will listen to requests from ``localhost:3000``.
 
